@@ -66,16 +66,13 @@
 ;; - Use 'length' to count the number of filtered elements.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (contarAprobados vNotas umbral)
-     (length (filter (lambda (p) (>= p umbral)) vNotas))
-  )
-  
+    ;; IMPLEMENT HERE
+    )
 
 (displayln "\nExercise 1): ")
 ;; FUNCTIONALITY TESTS
-(contarAprobados '(2.3 5 2.7 7 3.14) 5.0)  ; => 2
-(contarAprobados '(9.7 6.3 4.5 7.8 10.0) 4.0)  ; => 5
-
-
+;; (contarAprobados '(2.3 5 2.7 7 3.14) 5.0)  ; => 2
+;; (contarAprobados '(9.7 6.3 4.5 7.8 10.0) 4.0)  ; => 5
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXERCISE 2:
@@ -92,17 +89,14 @@
 ;;
 ;; Clue:
 ;; - Use 'cdr' to omit the name and get the rest of the list.
-
-
-
 (define (notasEstudiante est)
-  (cdr est)
-)
+    ;; IMPLEMENT HERE
+    )
 
 (displayln "\nExercise 2a): ")
 ;; FUNCTIONALITY TESTS
-(notasEstudiante unaPersona)  ; => ((EXAMEN1 9.1) (EXAMEN2 10.0) (EXAMEN4 9.0) (EXAMEN5 9.0))
-(notasEstudiante otraPersona)  ; => ((EXAMEN1 3.5) (EXAMEN2 7.0) (EXAMEN3 4.5) (EXAMEN4 10.0) (EXAMEN5 10.0))
+;; (notasEstudiante unaPersona)  ; => ((EXAMEN1 9.1) (EXAMEN2 10.0) (EXAMEN4 9.0) (EXAMEN5 9.0))
+;; (notasEstudiante otraPersona)  ; => ((EXAMEN1 3.5) (EXAMEN2 7.0) (EXAMEN3 4.5) (EXAMEN4 10.0) (EXAMEN5 10.0))
 
 
 ;; --- EXERCISE 2b: examenesEstudiante ---
@@ -112,13 +106,13 @@
 ;; Clue:
 ;; - Use 'map' along with 'car' to extract only the name of each exam.
 (define (examenesEstudiante est)
-    (map(lambda (p) (car p)) (notasEstudiante est))
+    ;; IMPLEMENT HERE
     )
 
 (displayln "\nExercise 2b): ")
 ;; FUNCTIONALITY TESTS
-(examenesEstudiante unaPersona)  ; => (EXAMEN1 EXAMEN2 EXAMEN4 EXAMEN5)
-(examenesEstudiante otraPersona)  ; => (EXAMEN1 EXAMEN2 EXAMEN3 EXAMEN4 EXAMEN5)
+;; (examenesEstudiante unaPersona)  ; => (EXAMEN1 EXAMEN2 EXAMEN4 EXAMEN5)
+;; (examenesEstudiante otraPersona)  ; => (EXAMEN1 EXAMEN2 EXAMEN3 EXAMEN4 EXAMEN5)
 
 
 ;; --- EXERCISE 2c: examenesAprobadosEstudiante ---
@@ -130,18 +124,13 @@
 ;; - First, use 'filter' with a lambda that compares the grade (extracted with 'cadr') with the threshold.
 ;; - Then, use 'map' to extract the names of the exams (using 'car').
 (define (examenesAprobadosEstudiante est umbral)
-  (map car (filter (lambda (p) (>= (cadr p)umbral))(notasEstudiante est)))
+    ;; IMPLEMENT HERE
     )
-
-   
 
 (displayln "\nExercise 2c): ")
 ;; FUNCTIONALITY TESTS
-(examenesAprobadosEstudiante unaPersona 10.0)  ; => (EXAMEN2)
-(examenesAprobadosEstudiante otraPersona 4.5)  ; => (EXAMEN2 EXAMEN3 EXAMEN4 EXAMEN5)
-
-
-
+;; (examenesAprobadosEstudiante unaPersona 10.0)  ; => (EXAMEN2)
+;; (examenesAprobadosEstudiante otraPersona 4.5)  ; => (EXAMEN2 EXAMEN3 EXAMEN4 EXAMEN5)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXERCISE 3:
@@ -161,14 +150,14 @@
 ;; - Use 'equal?' to compare lists/structures.
 ;; - Extract the first match with 'car'.
 (define (notasNombreEstudiante almacen nombre)
-    (car(filter(lambda (p) (equal? (car p) nombre))almacen))
+    ;; IMPLEMENT HERE
     )
 
 (displayln "\nExercise 3a): ")
 ;; FUNCTIONALITY TESTS
- (notasNombreEstudiante AlmacenNotas '(Menéndez Pérez, Luis))  
+;; (notasNombreEstudiante AlmacenNotas '(Menéndez Pérez, Luis))  
 ;;   => ((Menéndez Pérez, Luis) (EXAMEN1 3.3) (EXAMEN2 6.7) (EXAMEN4 8.0))
-(notasNombreEstudiante AlmacenNotas '(Stark, Anthony Edward))  
+;; (notasNombreEstudiante AlmacenNotas '(Stark, Anthony Edward))  
 ;;   => ((Stark, Anthony Edward) (EXAMEN1 10.0) (EXAMEN2 10.0) (EXAMEN3 10.0) (EXAMEN4 10.0) (EXAMEN5 10.0))
 
 
@@ -181,17 +170,14 @@
 ;; - Use the function 'notasCompletas' to get all the grades.
 ;; - Use 'filter' with a lambda that selects the grades below the threshold.
 ;; - If the resulting list is empty (use 'null?'), then the student passed all the exams.
-
-
 (define (todoAprobado? est umbral)
-  (null? (filter (lambda (p) (< p umbral ))(notasCompletas est))))
-    
-    
+    ;; IMPLEMENT HERE
+    )
 
 (displayln "\nExercise 3b): ")
 ;; FUNCTIONALITY TESTS
-(todoAprobado? unaPersona 3.0)  ; => #f
-(todoAprobado? otraPersona 3.0)  ; => #t
+;; (todoAprobado? unaPersona 3.0)  ; => #f
+;; (todoAprobado? otraPersona 3.0)  ; => #t
 
 
 ;; --- EXERCISE 3c: listaTodoAprobado ---
@@ -203,18 +189,13 @@
 ;; - Use 'filter' to select the students who meet the condition (use your function from 3b).
 ;; - Use 'map' to extract the name (first element) of each record.
 (define (listaTodoAprobado almacen umbral)
-   (map car
-       (filter (lambda (est)
-                 (todoAprobado? est umbral))
-               almacen))
-  )
-    
+    ;; IMPLEMENT HERE
+    )
+
 (displayln "\nExercise 3c): ")
 ;; FUNCTIONALITY TESTS
-(listaTodoAprobado AlmacenNotas 3.5)  
-;;   => ((Riestra García, Verónica) (Stark, Anthony Edward))pero q
-
-
+;; (listaTodoAprobado AlmacenNotas 3.5)  
+;;   => ((Riestra García, Verónica) (Stark, Anthony Edward))
 
 ; ---------------------------------------------------------------------------------------------------
 ; CHANGING THE TOPIC
@@ -232,7 +213,6 @@
     ( (Danvers, Carol) ((0 4) (5 6) (2 6)) )
 ))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXERCISE 4:
 ;; ============
@@ -245,15 +225,13 @@
 ;; - Use 'filter' with a lambda to find the record whose name (first element) matches.
 ;; - Extract the list of pieces from that record.
 (define (fichasJugador BD nombre)
-    (cadar(filter (lambda (p) (equal? (car p) nombre)) BD))
-  )
-    
+    ;; IMPLEMENT HERE
+    )
 
 (displayln "\nExercise 4): ")
 ;; FUNCTIONALITY TESTS
- (fichasJugador fichasJugadores '(Williams, Ellie))  ; => ((4 4) (3 6) (1 4) (2 5))
- (fichasJugador fichasJugadores '(Danvers, Carol))     ; => ((0 4) (5 6) (2 6))
-
+;; (fichasJugador fichasJugadores '(Williams, Ellie))  ; => ((4 4) (3 6) (1 4) (2 5))
+;; (fichasJugador fichasJugadores '(Danvers, Carol))     ; => ((0 4) (5 6) (2 6))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -266,17 +244,15 @@
 ;; Clues:
 ;; - Use 'filter' with a lambda that checks if (car piece) is equal to (cadr piece).
 (define (fichasDobles lFichas)
-    (filter (lambda (ficha) (equal? (car ficha) (cadr ficha))) lFichas)
+    ;; IMPLEMENT HERE
     )
 
 (displayln "\nExercise 5): ")
 ;; FUNCTIONALITY TESTS
- (fichasDobles '((2 4) (3 3) (1 3) (6 6) (0 1)))   ; => ((3 3) (6 6))
- (fichasDobles '((2 4) (0 3) (1 3) (3 6) (0 1)))       ; => () 
+;; (fichasDobles '((2 4) (3 3) (1 3) (6 6) (0 1)))   ; => ((3 3) (6 6))
+;; (fichasDobles '((2 4) (0 3) (1 3) (3 6) (0 1)))       ; => ()
 
 
-
- 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EXERCISE 6:
 ;; ============
@@ -289,15 +265,12 @@
 ;;   You can use 'append' or a similar technique.
 ;; - Use 'apply' with '+' to sum all the numbers.
 (define (puntosTotales lFichas)
-  (if (null? lFichas)
-      0
-      (apply + (append (map car lFichas)
-                       (map cadr lFichas)))))
-    
+    ;; IMPLEMENT HERE
+    )
 
 (displayln "\nExercise 6): ")
 ;; FUNCTIONALITY TESTS
- (puntosTotales '((2 4) (3 3) (1 3) (6 6) (0 1))) ; => 29
- (puntosTotales '((2 4) (0 3) (1 3) (3 6) (0 1))) ; => 23
- ;(puntosTotales '(()))                               ; => 0
+;; (puntosTotales '((2 4) (3 3) (1 3) (6 6) (0 1))) ; => 29
+;; (puntosTotales '((2 4) (0 3) (1 3) (3 6) (0 1))) ; => 23
+;; (puntosTotales '(()))                               ; => 0
 
