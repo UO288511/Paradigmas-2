@@ -1,0 +1,235 @@
+(require mzlib/compat racket/function)
+
+; For all requested functions, and whenever possible, currying should be used
+
+;-----------------------------------------------------------------------------------------
+; EXERCISE 1
+; Define, using FOS, the function addLast(l, l1, l2, ...) which, given a list l
+; and a sequence of lists l1, l2, ..., returns the list of lists (l1' l2' ...), where
+; each li' is the concatenation of li with the list l.
+;-----------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define (addLast l . list)
+  (map(lambda(li)(append l li))list))
+  
+
+(display "Exercise 1) addLast: ")
+(addLast '((a) b) () '(c) '(1 (2 3))) ;=> (((a) b) (c (a) b) (1 (2 3) (a) b))
+
+
+;-----------------------------------------------------------------------------------------
+; EXERCISE 2
+; Define, using FOS, the function addLast+(ll, l1, l2, ...) which, given a list of lists
+; ll and a sequence of lists l1, l2, ..., returns the list of lists (l1' l2' ...).
+; Each li' is the concatenation of li with each of the lists in ll, preserving their order.
+;-----------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define (addLast+ l . list)
+  (map(lambda(li)(foldr append li l))list))
+
+(display "\nExercise 2) addLast+: ")
+(addLast+ '((a) ((b) c)) () '(d) '(1 (2 3))) ;=> ((a (b) c) (d a (b) c) (1 (2 3) a (b) c))
+
+
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3
+; Use FOS to define the functions requested below, given the definition of the symbol Hands,
+; which contains the information about the state of an UNO game at a given moment.
+;
+; All cards in an UNO deck have an associated value that is either a number between 0 and 9
+; or a symbolic value corresponding to different actions: draw2, reverse, skip-turn,
+; wild-color, and wild-draw4. Moreover, all cards have a color: blue, red, green, or yellow,
+; except for wild cards, which can be used with any color. Therefore, each card is represented
+; by a list of two elements (value color), except for wild cards, which are represented by a
+; single-element list (its value).
+;------------------------------------------------------------------------------------
+
+(define Hands
+  '((ana    ((4 red) (9 red) (9 green) (wild-color) (9 green) (8 green) (3 blue)))
+    (rosa   ((0 yellow) (1 yellow) (3 red) (8 blue) (4 green) (3 red) (9 blue)))
+    (luis   ((wild-color) (8 yellow) (5 red) (7 yellow) (5 green) (4 yellow)))
+    (pedro  ((7 yellow) (1 red) (4 green) (9 red) (7 red) (6 yellow) (4 red)))
+    (maria  ((7 green) (8 yellow) (0 red) (wild-draw4) (3 green) (8 green) (3 blue)))
+    (carmen ((8 blue) (5 green) (5 yellow) (6 yellow) (3 yellow) (6 blue) (skip-turn blue)))
+    (blanca ((3 yellow) (1 red) (5 yellow) (4 yellow) (2 blue) (9 blue) (7 blue)))
+    (quique ((9 yellow) (reverse red) (2 red) (6 green) (8 red) (1 blue) (1 green)))))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3a
+; Define the function player-hand(name, hands) which, given the name of a player from the
+; hands in an UNO game, returns that player's cards:
+; the list (player-hand).
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define(player-hand name Data)
+  (cadr(assoc name Data)))
+
+(displayln "\nExercise 3a) player-hand: ")
+(player-hand 'maria Hands) ;=> ((7 green) (8 yellow) (0 red) (wild-color) (3 green) (8 green) (3 blue))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3b
+; Define the function wildcard?(player-hand) that returns true if the player's hand
+; contains a wild card, and false otherwise.
+;
+; Note that there are two types of wild cards: wild-color and wild-draw4.
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define (wildcard? hand)
+  (if (or (member '(wild-color) hand) (member '(wild-draw4) hand)) '#t '#f))
+
+
+(displayln "\nExercise 3b wildcard?")
+(wildcard? (player-hand 'luis Hands)) ;=> #t
+(wildcard? (player-hand 'maria Hands)) ;=> #t
+(wildcard? (player-hand 'quique Hands)) ;=> #f
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3c
+; Define the function value-compatible(value, player-hand) which returns the list
+; of cards from a hand whose value (numeric or symbolic) is playable for the given value.
+;
+; A card is considered value-compatible if it has the same value or is a wild card.
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define (value-compatible value hand)
+  (filter (lambda (card)
+            (or ;(wildcard? card)
+                (member 'wild-draw4 card)
+                (member 'wild-color card)
+                (eq? value (car card))))
+          hand))
+
+(displayln "\nExercise 3c)")
+(value-compatible 9 (player-hand 'ana Hands)) ;=> ((9 red) (9 red) (9 green) (wild-color))
+(value-compatible 8 (player-hand 'maria Hands)) ;=> ((8 yellow) (8 green) (wild-draw4))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3d
+; Define the function color-compatible(color, player-hand) that returns the list of
+; cards from a hand that are playable for the given color.
+;
+; A card is considered color-compatible if it has the same color or is a wild card.
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define (color-compatible color hand)
+  (filter (lambda (card)
+            (or (member 'wild-draw4 card)
+                (member 'wild-color card)
+                (member color (cdr card))))     
+          hand))
+
+(displayln "\nExercise 3d) color-compatible: ")
+(color-compatible 'green (player-hand 'maria Hands)) ;=> ((7 green) (3 green) (8 green) (wild-draw4))
+(color-compatible 'red (player-hand 'pedro Hands)) ;=> ((1 red) (9 red) (7 red) (4 red))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3e
+; Define the function compatibles(card, player-hand) that returns the list of cards
+; from a hand that are compatible with the given card (by value or color). The
+; argument card will always be a list of two elements (value color), even if the
+; card is a wild card, because it represents the chosen color to continue the game.
+;
+; A card in the hand is compatible with the given card if it is value or color
+; compatible with it.
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+(define (compatibles card hand)
+  (filter (lambda (x)
+            (or (color-compatible (cdr card) hand)        ; Verifica si es compatible por color
+                (value-compatible (car card) hand)))     ; Verifica si es compatible por valor
+          hand))
+
+
+
+(displayln "\nExercise 3e) compatibles: ")
+(compatibles '(9 red) (player-hand 'ana Hands)) ;=> ((4 red) (9 red) (9 green) (wild-color) (9 green))
+(compatibles '(wild-color green) (player-hand 'maria Hands)) ;=> ((7 green) (wild-draw4) (3 green) (8 green))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3f
+; Define the function players-with-wild(hands) that returns the list of names of
+; players who have a wild card in their hand.
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+
+(display "\nExercise 3f) players-with-wild: ")
+;(players-with-wild Hands) ;=> (ana luis maria)
+
+;------------------------------------------------------------------------------------
+; EXERCISE 3g
+; Define the function players-compatible-cards(card, hands) that returns, for each player,
+; the cards from their hand that are compatible with the given card. The argument
+; card will always be a list of two elements (value color), even if the card is a wild card,
+; because it represents the chosen color to continue the game.
+;------------------------------------------------------------------------------------
+
+; WRITE THE DEFINITION HERE
+
+(displayln "\nExercise 3g) players-compatible-cards:")
+;(players-compatible-cards '(0 red) Hands)
+;=> ((ana ((4 red) (9 red) (wild-color)))
+;    (rosa ((0 yellow) (3 red) (3 red)))
+;    (luis ((wild-color) (5 red)))
+;    (pedro ((1 red) (9 red) (7 red) (4 red)))
+;    (maria ((0 red) (wild-draw4)))
+;    (carmen ())
+;    (blanca ((1 red)))
+;    (quique ((reverse red) (2 red) (8 red))))
+
+;(players-compatible-cards '(wild-color green) Hands)
+;=> ((ana ((9 green) (wild-color) (9 green) (8 green)))
+;    (rosa ((4 green)))
+;    (luis ((wild-color) (5 green)))
+;    (pedro ((4 green)))
+;    (maria ((7 green) (wild-draw4) (3 green) (8 green)))
+;    (carmen ((5 green)))
+;    (blanca ())
+;    (quique ((6 green) (1 green))))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 4
+; Given the definition of the symbol Vectors, which is a list of vectors of variable dimension
+; where each vector has a name followed by its coordinates, obtain the functions requested below.
+;------------------------------------------------------------------------------------
+
+(define Vectors
+  '(v1 (12 2.5 -8 24 33)
+    v2 (1 -2 3 0 7 -2.3 0 21)
+    v3 (-12 2.8 3.5)
+    v4 (-1 2 -2.3 5)
+    v5 (-12.5 -3 8 5 24 0 -3 12)
+    v6 (3 0 18 15 9 12.5)))
+
+;------------------------------------------------------------------------------------
+; EXERCISE 4a
+; Use FOS to provide an expression that computes the sum of all
+; the components of the vectors in Vectors.
+;------------------------------------------------------------------------------------
+
+(display "\nExercise 4a) sum of all components: ") ;=> 177.2
+
+; INSERT THE FOS EXPRESSION HERE, NO DEFINITION IS REQUIRED
+; THE DISPLAY ABOVE SHOWS THE EXPECTED OUTPUT
+
+
+;------------------------------------------------------------------------------------
+; EXERCISE 4b
+; Use FOS to provide an expression that produces a list with the
+; name of each vector and, instead of its components, the number of
+; components it has.
+;------------------------------------------------------------------------------------
+
+(displayln "\nExercise 4b) number of components: ") ;=> (v1 5 v2 8 v3 3 v4 4 v5 8 v6 6)
+
+; INSERT THE FOS EXPRESSION HERE, NO DEFINITION IS REQUIRED
+; THE DISPLAY ABOVE SHOWS THE EXPECTED OUTPUT
