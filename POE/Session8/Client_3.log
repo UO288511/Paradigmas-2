@@ -1,0 +1,3 @@
+S1: usuariosConectados()
+R1: OK!(0)
+S2: reset()
